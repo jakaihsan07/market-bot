@@ -1,3 +1,4 @@
+from builtins import int
 import os
 import time
 from datetime import datetime
@@ -5,7 +6,26 @@ from datetime import datetime
 import requests
 import certifi
 from dotenv import load_dotenv
+from flask import Flask
+import threading
 
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is United and Running!"
+
+def run_web():
+    # Render menyediakan port otomatis di environment variable mereka
+    import os
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
+
+# Jalankan server web di background thread agar tidak mengganggu looping bot Telegram kamu
+threading.Thread(target=run_web).start()
+
+# --- DI BAWAH INI ADALAH KODE UTAMA LOOPING BOT TELEGRAM KAMU YANG SUDAH ADA ---
+# (Contoh: bot.polling() atau while True getUpdates kamu)
 load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
